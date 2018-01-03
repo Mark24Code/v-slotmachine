@@ -48,7 +48,8 @@ export default {
       newName: '',
       isRunning: false,
       squeue:[],
-      luckyguy_index:undefined
+      luckyguy_index:undefined,
+      interval:200
 
     }
   },
@@ -72,10 +73,6 @@ export default {
         name: '铃铛',
         avatar: '/static/avatar/slot4.png'
       }]
-    },
-    interval:{
-      type:Number,
-      default:200
     },
     luckyguy:{
       type:Object,

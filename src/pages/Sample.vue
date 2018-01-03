@@ -72,9 +72,9 @@ export default {
   methods: {
     startAll(){
       let self = this;
-      console.log('开始所有');
       self.isRunning = true;
       EVENT_BUS.$emit('start_all_event');
+      console.log('开始所有');
     },
     stopAll(){
       let self = this;
@@ -87,10 +87,11 @@ export default {
       let self = this;
       let slot_index = 0;
       let startIntervalId= setInterval(()=>{
-        if(slot_index>self.luckyguys.length){
+        if(slot_index>=self.luckyguys.length-1){
           clearInterval(startIntervalId)
         }
         EVENT_BUS.$emit('start_event',slot_index);
+        console.log('依次开始:',slot_index);
         slot_index += 1
 
       },self.startInterval)
@@ -99,10 +100,11 @@ export default {
       let self = this;
       let slot_index = 0;
       let stopIntervalId= setInterval(()=>{
-        if(slot_index>self.luckyguys.length){
+        if(slot_index>=self.luckyguys.length-1){
           clearInterval(stopIntervalId)
         }
         EVENT_BUS.$emit('stop_event',slot_index);
+        console.log('依次结束:',slot_index);
         slot_index += 1
 
       },self.stopInterval)
