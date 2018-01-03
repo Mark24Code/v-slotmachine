@@ -11,7 +11,7 @@
             </transition>
           </template>
         </div>
-        <p>{{squeue[current_index].name}}</p>
+        <div class="user-name">{{squeue[current_index].name}}</div>
       </div>
     </div>
     <template v-if="debug">
@@ -37,7 +37,7 @@ import {unorderArr} from '@/util/index';
 import EVENT_BUS from '@/Bus';
 
 const interval = 200;//slideInUp slideOutUp
-const speedArr = [200,160,140,100,60];
+const speedArr = [200,180,160,140,120];
 export default {
   name: 'SlotMachine',
   data() {
@@ -180,40 +180,35 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
-.user-cont{
+.slot-machine{
   position: relative;
+  width: 140px;
+  margin: 15px;
+  display: inline-block;
 }
 .avatar-cont {
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
-  border:4px solid black;
+  border:5px solid #fee117;
+  box-shadow: 0px 0px 20px #e9e8fd;
+  background-color: #fff;
   overflow: hidden;
   position: relative;
 }
 
 img.avatar{
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
 }
-
+.user-name{
+  font-size: 28px;
+  font-weight: 500;
+  color:#fee117;
+  text-align: center;
+  margin:20px;
+  text-shadow: 0px 0px 20px #e9e8fd;
+}
 </style>

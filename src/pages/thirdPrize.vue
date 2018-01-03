@@ -1,17 +1,17 @@
 <template>
-  <div class="users-pane">
+  <div class="users-pane" @click="watchClick">
     <div class="lucky-slots">
       <template v-for="luckyguy,index in luckyguys">
         <SlotMachine :queue="queue" :debug="debug" :luckyguy="luckyguy" :slot_index="index"/>
       </template>
     </div>
     <div class="control-pane">
+      <input ref="switch" class="switch" type="text" @keyup.enter="pressEnterKey"  :v-focus="focusPress" />
       <button @click="startAll">开始</button>
       <button @click="stopAll">结束</button>
       <button @click="startOneByOne">依次开始</button>
       <button @click="stopOneByOne">依次结束</button>
     </div>
-
   </div>
 </template>
 <script>
@@ -23,6 +23,7 @@ export default {
   name: 'Sample',
   data() {
     return {
+      focusPress:true,
       isRunning:false,
       debug:false,
       stopInterval:1000,
@@ -150,7 +151,25 @@ export default {
       }]
     }
   },
+  mounted(){
+    let self = this;
+    self.$refs.switch.focus();
+  },
   methods: {
+    watchClick(){
+      let self = this;
+      self.$refs.switch.focus();
+    },
+    pressEnterKey(event){
+      console.log("按下了")
+      let self = this;
+      if(self.isRunning){
+        self.stopAll();
+      }else{
+        self.startAll();
+      }
+
+    },
     startAll(){
       let self = this;
       self.isRunning = true;
@@ -199,10 +218,20 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.users-pane{
+  margin:60px 5%;
+}
 .lucky-slots{
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+  /*display: flex;*/
+  /*justify-content: space-around;*/
+  /*align-items: center;*/
+}
+.switch{
+  /*visibility: hidden;*/
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top:-100px;
+  left:-100px;
 }
 </style>

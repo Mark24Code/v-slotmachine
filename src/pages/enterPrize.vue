@@ -11,7 +11,6 @@
       <button @click="startOneByOne">依次开始</button>
       <button @click="stopOneByOne">依次结束</button>
     </div>
-
   </div>
 </template>
 <script>
@@ -63,87 +62,6 @@ export default {
       }, {
         name: 'BAR',
         avatar: '/static/avatar/slot5.png'
-      }, {
-        name: '铃铛',
-        avatar: '/static/avatar/slot4.png'
-      },{
-        name: '777',
-        avatar: '/static/avatar/slot6.png'
-      }, {
-        name: 'BAR',
-        avatar: '/static/avatar/slot5.png'
-      }, {
-        name: '铃铛',
-        avatar: '/static/avatar/slot4.png'
-      },{
-        name: '777',
-        avatar: '/static/avatar/slot6.png'
-      }, {
-        name: 'BAR',
-        avatar: '/static/avatar/slot5.png'
-      }, {
-        name: '铃铛',
-        avatar: '/static/avatar/slot4.png'
-      }, {
-        name: '铃铛',
-        avatar: '/static/avatar/slot4.png'
-      },{
-        name: '777',
-        avatar: '/static/avatar/slot6.png'
-      }, {
-        name: 'BAR',
-        avatar: '/static/avatar/slot5.png'
-      }, {
-        name: '铃铛',
-        avatar: '/static/avatar/slot4.png'
-      },{
-        name: '777',
-        avatar: '/static/avatar/slot6.png'
-      }, {
-        name: 'BAR',
-        avatar: '/static/avatar/slot5.png'
-      }, {
-        name: '铃铛',
-        avatar: '/static/avatar/slot4.png'
-      },{
-        name: '777',
-        avatar: '/static/avatar/slot6.png'
-      }, {
-        name: 'BAR',
-        avatar: '/static/avatar/slot5.png'
-      }, {
-        name: '铃铛',
-        avatar: '/static/avatar/slot4.png'
-      }, {
-        name: '铃铛',
-        avatar: '/static/avatar/slot4.png'
-      },{
-        name: '777',
-        avatar: '/static/avatar/slot6.png'
-      }, {
-        name: 'BAR',
-        avatar: '/static/avatar/slot5.png'
-      }, {
-        name: '铃铛',
-        avatar: '/static/avatar/slot4.png'
-      },{
-        name: '777',
-        avatar: '/static/avatar/slot6.png'
-      }, {
-        name: 'BAR',
-        avatar: '/static/avatar/slot5.png'
-      }, {
-        name: '铃铛',
-        avatar: '/static/avatar/slot4.png'
-      },{
-        name: '777',
-        avatar: '/static/avatar/slot6.png'
-      }, {
-        name: 'BAR',
-        avatar: '/static/avatar/slot5.png'
-      }, {
-        name: '铃铛',
-        avatar: '/static/avatar/slot4.png'
       }, {
         name: '铃铛',
         avatar: '/static/avatar/slot4.png'
