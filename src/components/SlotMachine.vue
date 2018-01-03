@@ -1,9 +1,9 @@
 <template>
   <div class="slot-machine">
     <div>
-      <div class="user-cont">
+      <div class="user-cont" v-if="squeue.length>0">
         <div class="avatar-cont">
-          <template v-for="user, index in mqueque">
+          <template v-for="user, index in squeue">
             <transition :duration="interval" name="custom-classes-transition2" enter-to-class="animated slideInUp" leave-to-class="animated slideOutUp">
               <div v-show="current_index === index" style="position:absolute;left:0;right:0;">
                 <img class="avatar" :src="user.avatar" alt="user.name">
@@ -11,12 +11,14 @@
             </transition>
           </template>
         </div>
-        <p>{{mqueque[current_index].name}}</p>
+        <p>{{squeue[current_index].name}}</p>
       </div>
     </div>
     <template v-if="debug">
       <p>SlotMachine Debug模式</p>
-      <div>队列: {{ mqueque }}</div>
+      <div>队列: {{ squeue }}</div>
+      <div>中奖:{{luckyguy}},luckyguy_index:{{luckyguy_index}}</div>
+      <div>当前 index:{{current_index}},luckyguy_index:{{luckyguy_index}}</div>
       <div>
         <input v-model="newName" type="text" placeholder="New Name" @keyup.enter="add"></input>
         <button @click="add">Add!</button>
@@ -31,6 +33,7 @@
   </div>
 </template>
 <script>
+import {unorderArr} from '@/util/index';
 import EVENT_BUS from '@/Bus';
 const interval = 200
 
@@ -41,7 +44,10 @@ export default {
       current_index: 0,
       intervalId: undefined,
       newName: '',
-      isRunning: true
+      isRunning: false,
+      squeue:[],
+      luckyguy_index:undefined
+
     }
   },
   props:{
@@ -49,7 +55,7 @@ export default {
       type:Boolean,
       defalut:false
     },
-    mqueque:{
+    queue:{
       type:Array,
       default:[{
         name: '樱桃',
@@ -68,17 +74,27 @@ export default {
     interval:{
       type:Number,
       default:200
+    },
+    luckyguy:{
+      type:Object,
+      default:null
     }
   },
   created() {
-    this.roundRobin()
+    let self = this;
+    self.squeue = unorderArr(self.queue);
+    // this.roundRobin()
   },
   mounted(){
-    EVENT_BUS.$on("startevent",function(msg){
-      console.log('听到了startEvent:',msg)
+    let self = this;
+    if(self.luckyguy){
+      self.luckyguy_index = self.enqueue(self.luckyguy)
+    }
+    EVENT_BUS.$on("startevent",function(){
+      self.start()
     });
-    EVENT_BUS.$on("stopevent",function(msg){
-      console.log('听到了stopEvent:',msg)
+    EVENT_BUS.$on("stopevent",function(){
+      self.stop()
     })
   },
   computed:{
@@ -94,7 +110,7 @@ export default {
   methods: {
     roundRobin: function() {
       this.intervalId = setInterval(() => {
-        if (this.current_index + 1 === this.mqueque.length) {
+        if (this.current_index + 1 === this.squeue.length) {
           this.current_index = 0
         } else {
           this.current_index += 1
@@ -102,16 +118,34 @@ export default {
       }, interval)
     },
     stop: function() {
-      clearInterval(this.intervalId)
-      this.isRunning = false
+      let self = this;
+      if(self.isRunning){
+        clearInterval(this.intervalId);
+        console.log('stop');
+        console.log('self.luckyguy_index:',self.luckyguy_index);
+        console.log('self.current_index:',self.current_index)
+        if(self.luckyguy_index){
+          self.current_index = self.luckyguy_index;
+        }
+        this.isRunning = false;
+      }
     },
     start: function() {
-      this.roundRobin()
-      this.isRunning = true
+      let self = this;
+      if(!self.isRunning){
+        this.roundRobin()
+        this.isRunning = true
+      }
     },
     add: function(event) {
-      this.mqueque.push(this.newName)
-      this.newName = ''
+      let self = this;
+      let index = self.squeue.push(self.newName)
+      self.newName = '';
+      return index;
+    },
+    enqueue:function(guy){
+      let self = this;
+      return self.squeue.push(guy)-1
     }
   }
 }

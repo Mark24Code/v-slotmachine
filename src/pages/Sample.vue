@@ -1,8 +1,9 @@
 <template>
   <div class="users-pane">
     <div class="">
-      <SlotMachine :mqueque="mqueque" :debug="debug" />
-      <SlotMachine :mqueque="mqueque" :debug="debug" />
+      <template v-for="luckyguy in luckyguys">
+        <SlotMachine :queue="queue" :debug="debug" :luckyguy="luckyguy"/>
+      </template>
     </div>
     <div class="control-pane">
       <button @click="startAll">开始</button>
@@ -20,11 +21,11 @@ export default {
   data() {
     return {
       driveData:[{
-        mqueque:[]
+        queue:[]
       }],
       isRunning:false,
-      debug:true,
-      mqueque:[{
+      debug:false,
+      queue:[{
         name: '樱桃',
         avatar: '/static/avatar/slot1.png'
       }, {
@@ -36,6 +37,16 @@ export default {
       }, {
         name: '铃铛',
         avatar: '/static/avatar/slot4.png'
+      }],
+      luckyguys:[{
+        name: '777',
+        avatar: '/static/avatar/slot6.png'
+      }, {
+        name: 'BAR',
+        avatar: '/static/avatar/slot5.png'
+      }, {
+        name: '铃铛',
+        avatar: '/static/avatar/slot4.png'
       }]
     }
   },
@@ -44,12 +55,12 @@ export default {
       let self = this;
       console.log('开始所有');
       self.isRunning = true;
-      EVENT_BUS.$emit('startevent','12');
+      EVENT_BUS.$emit('startevent');
     },
     stopAll(){
       let self = this;
       self.isRunning = false;
-      EVENT_BUS.$emit('stopevent','134');
+      EVENT_BUS.$emit('stopevent');
       console.log('停止所有');
 
     }
