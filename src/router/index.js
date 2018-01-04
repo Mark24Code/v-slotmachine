@@ -13,8 +13,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Sample',
-      component: Sample
+      redirect: { name: 'thirdprize' }
     },{
       path: '/thirdprize',
       name: 'thirdprize',

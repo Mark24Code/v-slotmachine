@@ -19,12 +19,14 @@
       <button @click="startOneByOne">依次开始</button>
       <button @click="stopOneByOne">依次结束</button>
     </div>
+    <Helpers />
   </div>
 </template>
 <script>
 import axios from 'axios';
 import SlotMachine from '@/components/SlotMachine';
 import EVENT_BUS from '@/Bus';
+import Helpers from '@/components/Helpers';
 
 export default {
   name: 'firstPrize',
@@ -156,7 +158,8 @@ export default {
     }
   },
   components: {
-    SlotMachine
+    SlotMachine,
+    Helpers
   }
 }
 
