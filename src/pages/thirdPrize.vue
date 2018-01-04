@@ -1,26 +1,42 @@
 <template>
+  <div class="page-cont">
+  <div class="prize-title">
+    <img src="/static/thirdPrizeTitle.png" alt="三等奖">
+  </div>
   <div class="users-pane" @click="watchClick">
     <div class="lucky-slots">
-      <template v-for="luckyguy,index in luckyguys">
-        <SlotMachine :queue="queue" :debug="debug" :luckyguy="luckyguy" :slot_index="index"/>
+      <template v-for="gid in luckyguys.length/10">
+        <div class="slot-row">
+          <template v-for="luckyguy,index in luckyguys.slice((gid-1)*10,gid*10)">
+            <SlotMachine :queue="queue" :debug="debug" :luckyguy="luckyguy" :slot_index="(gid-1)*10+index"/>
+          </template>
+        </div>
       </template>
     </div>
-    <div class="control-pane">
-      <input ref="switch" class="switch" type="text" @keyup.enter="pressEnterKey"  :v-focus="focusPress" />
+
+    <div class="control-pane" v-if="debug">
       <button @click="startAll">开始</button>
       <button @click="stopAll">结束</button>
       <button @click="startOneByOne">依次开始</button>
       <button @click="stopOneByOne">依次结束</button>
     </div>
   </div>
+  <Modal :isShow="isShowModal">
+    <div class="prize-title">
+      <img src="/static/thirdPrizeTitle.png" alt="三等奖">
+    </div>
+  </Modal>
+  <input ref="switch" class="switch" type="text" @keyup.enter="pressEnterKey"  :v-focus="focusPress" />
+  </div>
 </template>
 <script>
 import axios from 'axios';
 import SlotMachine from '@/components/SlotMachine';
+import Modal from '@/components/Modal';
 import EVENT_BUS from '@/Bus';
 
 export default {
-  name: 'Sample',
+  name: 'thirdPrize',
   data() {
     return {
       focusPress:true,
@@ -28,7 +44,7 @@ export default {
       debug:false,
       stopInterval:1000,
       startInterval:800,
-
+      isShowModal:false,
       queue:[{
         name: '樱桃',
         avatar: '/static/avatar/slot1.png'
@@ -165,8 +181,10 @@ export default {
       let self = this;
       if(self.isRunning){
         self.stopAll();
+        self.isShowModal = true;
       }else{
         self.startAll();
+        self.isShowModal = false;
       }
 
     },
@@ -175,12 +193,14 @@ export default {
       self.isRunning = true;
       EVENT_BUS.$emit('start_all_event');
       console.log('开始所有');
+      self.isShowModal = false;
     },
     stopAll(){
       let self = this;
       self.isRunning = false;
       EVENT_BUS.$emit('stop_all_event');
       console.log('停止所有');
+      self.isShowModal = true;
 
     },
     startOneByOne(){
@@ -211,27 +231,40 @@ export default {
     }
   },
   components:{
-    SlotMachine
+    SlotMachine,
+    Modal
   }
 }
 
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.page-cont{
+  margin:70px 0;
+}
+.prize-title{
+  text-align: center;
+}
 .users-pane{
   margin:60px 5%;
 }
 .lucky-slots{
-  /*display: flex;*/
-  /*justify-content: space-around;*/
-  /*align-items: center;*/
+  display: flex;
+  flex-direction: column;
+}
+.slot-row{
+  display: flex;
+  justify-content: space-around;
 }
 .switch{
   /*visibility: hidden;*/
-  position: absolute;
+  position: fixed;
   width: 10px;
   height: 10px;
-  top:-100px;
-  left:-100px;
+  top:-15px;
+  left:-15px;
+/*  top:-100px;
+  left:-100px;*/
+  z-index: 2000;
 }
 </style>
