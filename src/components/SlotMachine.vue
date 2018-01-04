@@ -58,6 +58,10 @@ export default {
       type:Boolean,
       defalut:false
     },
+    circleSize:{
+      type:Number,
+      defalut:130
+    },
     queue:{
       type:Array,
       default:[{
