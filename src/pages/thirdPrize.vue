@@ -1,9 +1,10 @@
 <template>
-  <div class="page-cont">
+  <div class="page-cont" @click="watchClick">
+  <input ref="switch" class="switch" type="text" @keyup.enter="pressEnterKey" />
   <div class="prize-title">
     <img src="/static/thirdPrizeTitle.png" alt="三等奖">
   </div>
-  <div class="users-pane" @click="watchClick">
+  <div class="users-pane" >
     <div class="lucky-slots">
       <template v-for="gid in luckyguys.length/10">
         <div class="slot-row">
@@ -21,25 +22,17 @@
       <button @click="stopOneByOne">依次结束</button>
     </div>
   </div>
-  <Modal :isShow="isShowModal">
-    <div class="prize-title">
-      <img src="/static/thirdPrizeTitle.png" alt="三等奖">
-    </div>
-  </Modal>
-  <input ref="switch" class="switch" type="text" @keyup.enter="pressEnterKey"  :v-focus="focusPress" />
   </div>
 </template>
 <script>
 import axios from 'axios';
 import SlotMachine from '@/components/SlotMachine';
-import Modal from '@/components/Modal';
 import EVENT_BUS from '@/Bus';
 
 export default {
   name: 'thirdPrize',
   data() {
     return {
-      focusPress:true,
       isRunning:false,
       debug:false,
       stopInterval:1000,
@@ -231,8 +224,7 @@ export default {
     }
   },
   components:{
-    SlotMachine,
-    Modal
+    SlotMachine
   }
 }
 
@@ -261,10 +253,8 @@ export default {
   position: fixed;
   width: 10px;
   height: 10px;
-  top:-15px;
-  left:-15px;
-/*  top:-100px;
-  left:-100px;*/
+  top:-30px;
+  left:-30px;
   z-index: 2000;
 }
 </style>
