@@ -6,10 +6,10 @@
   </div>
   <div class="users-pane" >
     <div class="lucky-slots">
-      <template v-for="gid in luckyguys.length/10">
+      <template v-for="gid in luckyguys.length/numPerRow">
         <div class="slot-row">
-          <template v-for="luckyguy,index in luckyguys.slice((gid-1)*10,gid*10)">
-            <SlotMachine :queue="queue" :debug="debug" :luckyguy="luckyguy" :slot_index="(gid-1)*10+index"/>
+          <template v-for="luckyguy,index in luckyguys.slice((gid-1)*numPerRow,gid*numPerRow)">
+            <SlotMachine :queue="queue" :debug="debug" :luckyguy="luckyguy" :slot_index="(gid-1)*numPerRow+index"/>
           </template>
         </div>
       </template>
@@ -33,11 +33,11 @@ export default {
   name: 'thirdPrize',
   data() {
     return {
+      numPerRow:10,
       isRunning:false,
       debug:false,
       stopInterval:1000,
       startInterval:800,
-      isShowModal:false,
       queue:[{
         name: '樱桃',
         avatar: '/static/avatar/slot1.png'
@@ -174,10 +174,8 @@ export default {
       let self = this;
       if(self.isRunning){
         self.stopAll();
-        self.isShowModal = true;
       }else{
         self.startAll();
-        self.isShowModal = false;
       }
 
     },
@@ -186,15 +184,12 @@ export default {
       self.isRunning = true;
       EVENT_BUS.$emit('start_all_event');
       console.log('开始所有');
-      self.isShowModal = false;
     },
     stopAll(){
       let self = this;
       self.isRunning = false;
       EVENT_BUS.$emit('stop_all_event');
       console.log('停止所有');
-      self.isShowModal = true;
-
     },
     startOneByOne(){
       let self = this;
