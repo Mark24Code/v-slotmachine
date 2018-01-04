@@ -1,27 +1,24 @@
 <template>
   <div class="page-cont" @click="watchClick">
-  <input ref="switch" class="switch" type="text" @keyup.enter="pressEnterKey" />
-  <div class="prize-title">
-    <img src="/static/specialPrizeTitle.png" alt="特等奖">
-  </div>
-  <div class="users-pane" >
+    <input ref="switch" class="switch" type="text" @keyup.enter="pressEnterKey" />
+    <div class="prize-title">
+      <img src="/static/specialPrizeTitle.png" alt="特等奖">
+    </div>
     <div class="lucky-slots">
       <template v-for="gid in luckyguys.length/numPerRow">
         <div class="slot-row">
           <template v-for="luckyguy,index in luckyguys.slice((gid-1)*numPerRow,gid*numPerRow)">
-            <SlotMachine :queue="queue" :debug="debug" :luckyguy="luckyguy" :slot_index="(gid-1)*numPerRow+index" :circleSize="circleSize"/>
+            <SlotMachine :queue="queue" :debug="debug" :luckyguy="luckyguy" :slot_index="(gid-1)*numPerRow+index" :circleSize="circleSize" />
           </template>
         </div>
       </template>
     </div>
-
     <div class="control-pane" v-if="debug">
       <button @click="startAll">开始</button>
       <button @click="stopAll">结束</button>
       <button @click="startOneByOne">依次开始</button>
       <button @click="stopOneByOne">依次结束</button>
     </div>
-  </div>
   </div>
 </template>
 <script>
@@ -33,13 +30,13 @@ export default {
   name: 'specialPrize',
   data() {
     return {
-      numPerRow:1,
-      circleSize:140,
-      isRunning:false,
-      debug:false,
-      stopInterval:1000,
-      startInterval:800,
-      queue:[{
+      numPerRow: 1,
+      circleSize: 'big',
+      isRunning: false,
+      debug: false,
+      stopInterval: 1000,
+      startInterval: 800,
+      queue: [{
         name: '樱桃',
         avatar: '/static/avatar/slot1.png'
       }, {
@@ -51,7 +48,7 @@ export default {
       }, {
         name: '铃铛',
         avatar: '/static/avatar/slot4.png'
-      },{
+      }, {
         name: '777',
         avatar: '/static/avatar/slot6.png'
       }, {
@@ -68,71 +65,71 @@ export default {
         avatar: '/static/avatar/slot3.png'
       }],
 
-      luckyguys:[{
+      luckyguys: [{
         name: '777',
         avatar: '/static/avatar/slot6.png'
       }]
     }
   },
-  mounted(){
+  mounted() {
     let self = this;
     self.$refs.switch.focus();
   },
   methods: {
-    watchClick(){
+    watchClick() {
       let self = this;
       self.$refs.switch.focus();
     },
-    pressEnterKey(event){
+    pressEnterKey(event) {
       console.log("按下了")
       let self = this;
-      if(self.isRunning){
+      if (self.isRunning) {
         self.stopAll();
-      }else{
+      } else {
         self.startAll();
       }
 
     },
-    startAll(){
+    startAll() {
       let self = this;
       self.isRunning = true;
       EVENT_BUS.$emit('start_all_event');
       console.log('开始所有');
     },
-    stopAll(){
+    stopAll() {
       let self = this;
       self.isRunning = false;
       EVENT_BUS.$emit('stop_all_event');
       console.log('停止所有');
     },
-    startOneByOne(){
+    startOneByOne() {
       let self = this;
       let slot_index = 0;
-      let startIntervalId= setInterval(()=>{
-        if(slot_index>=self.luckyguys.length-1){
+      let startIntervalId = setInterval(() => {
+        if (slot_index >= self.luckyguys.length - 1) {
           clearInterval(startIntervalId)
         }
-        EVENT_BUS.$emit('start_event',slot_index);
-        console.log('依次开始:',slot_index);
+        EVENT_BUS.$emit('start_event', slot_index);
+        console.log('依次开始:', slot_index);
         slot_index += 1
 
-      },self.startInterval)
+      }, self.startInterval)
     },
-    stopOneByOne(){
+    stopOneByOne() {
       let self = this;
       let slot_index = 0;
-      let stopIntervalId= setInterval(()=>{
-        if(slot_index>=self.luckyguys.length-1){
+      let stopIntervalId = setInterval(() => {
+        if (slot_index >= self.luckyguys.length - 1) {
           clearInterval(stopIntervalId)
         }
-        EVENT_BUS.$emit('stop_event',slot_index);
-        console.log('依次结束:',slot_index);
+        EVENT_BUS.$emit('stop_event', slot_index);
+        console.log('依次结束:', slot_index);
         slot_index += 1
 
-      },self.stopInterval)
+      }, self.stopInterval)
     }
   },
-  components:{
+  components: {
     SlotMachine
   }
 }
@@ -140,31 +137,6 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.page-cont{
-  padding:70px 0;
-  height: 100%;
-}
-.prize-title{
-  text-align: center;
-}
-.users-pane{
-  margin:60px 5%;
-}
-.lucky-slots{
-  display: flex;
-  flex-direction: column;
-}
-.slot-row{
-  display: flex;
-  justify-content: space-around;
-}
-.switch{
-  /*visibility: hidden;*/
-  position: fixed;
-  width: 10px;
-  height: 10px;
-  top:-30px;
-  left:-30px;
-  z-index: 2000;
-}
+
+
 </style>

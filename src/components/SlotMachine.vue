@@ -1,5 +1,5 @@
 <template>
-  <div class="slot-machine">
+  <div class="slot-machine" :class="circleSize==='big'?'big':''">
     <div>
       <div class="user-cont" v-if="squeue.length>0">
         <div class="avatar-cont">
@@ -33,38 +33,38 @@
   </div>
 </template>
 <script>
-import {unorderArr} from '@/util/index';
+import { unorderArr } from '@/util/index';
 import EVENT_BUS from '@/Bus';
 
-const interval = 200;//slideInUp slideOutUp
-const speedArr = [200,180,160,140,120];
+const interval = 200; //slideInUp slideOutUp
+const speedArr = [200, 180, 160, 140, 120];
 export default {
   name: 'SlotMachine',
   data() {
     return {
       current_index: 0,
       intervalId: undefined,
-      moreSpeedIntervalId:undefined,
+      moreSpeedIntervalId: undefined,
       newName: '',
       isRunning: false,
-      squeue:[],
-      luckyguy_index:undefined,
-      interval:200
+      squeue: [],
+      luckyguy_index: undefined,
+      interval: 200
 
     }
   },
-  props:{
-    debug:{
-      type:Boolean,
-      defalut:false
+  props: {
+    debug: {
+      type: Boolean,
+      defalut: false
     },
-    circleSize:{
-      type:Number,
-      defalut:130
+    circleSize: {
+      type: String,
+      defalut: 'defalut'
     },
-    queue:{
-      type:Array,
-      default:[{
+    queue: {
+      type: Array,
+      default: [{
         name: '樱桃',
         avatar: '/static/avatar/slot1.png'
       }, {
@@ -78,69 +78,59 @@ export default {
         avatar: '/static/avatar/slot4.png'
       }]
     },
-    luckyguy:{
-      type:Object,
-      default:null
+    luckyguy: {
+      type: Object,
+      default: null
     },
-    slot_index:{
-      type:Number,
-      default:null
+    slot_index: {
+      type: Number,
+      default: null
     }
   },
   created() {
     let self = this;
     self.squeue = unorderArr(self.queue);
   },
-  mounted(){
+  mounted() {
     let self = this;
-    if(self.luckyguy){
+    if (self.luckyguy) {
       self.luckyguy_index = self.enqueue(self.luckyguy)
     }
-    EVENT_BUS.$on("start_all_event",function(){
+    EVENT_BUS.$on("start_all_event", function() {
       self.start()
     });
-    EVENT_BUS.$on("stop_all_event",function(){
+    EVENT_BUS.$on("stop_all_event", function() {
       self.stop()
     });
-    EVENT_BUS.$on("start_event",function(slot_index){
-      if(self.slot_index==slot_index){
+    EVENT_BUS.$on("start_event", function(slot_index) {
+      if (self.slot_index == slot_index) {
         self.start()
       }
     });
-    EVENT_BUS.$on("stop_event",function(slot_index){
-      if(self.slot_index==slot_index){
+    EVENT_BUS.$on("stop_event", function(slot_index) {
+      if (self.slot_index == slot_index) {
         self.stop()
       }
     });
 
-  },
-  computed:{
-    styles(){
-      let self = this;
-      let interval = self.interval;
-      return {
-        animationDuration:`${interval / 1000 }`,
-        animationFillMode: 'both'
-      }
-    }
   },
   methods: {
     roundRobin: function() {
       let self = this;
       let squeueLen = self.squeue.length;
       self.intervalId = setInterval(() => {
-        self.current_index = (self.current_index+1)%squeueLen;
+        self.current_index = (self.current_index + 1) % squeueLen;
       }, interval)
     },
     stop: function() {
       let self = this;
 
-      if(self.isRunning){
-        if(self.moreSpeedIntervalId){
+      if (self.isRunning) {
+        if (self.moreSpeedIntervalId) {
           clearInterval(self.moreSpeedIntervalId);
         }
         clearInterval(this.intervalId);
-        if(self.luckyguy_index){
+        if (self.luckyguy_index) {
           self.current_index = self.luckyguy_index;
         }
         this.isRunning = false;
@@ -148,21 +138,21 @@ export default {
     },
     start: function() {
       let self = this;
-      if(!self.isRunning){
+      if (!self.isRunning) {
         this.roundRobin()
         this.isRunning = true
 
 
         let moreSpeedCount = 0;
-        self.moreSpeedIntervalId = setInterval(()=>{
-          if(moreSpeedCount<5){
+        self.moreSpeedIntervalId = setInterval(() => {
+          if (moreSpeedCount < 5) {
             self.interval = speedArr[moreSpeedCount]
             moreSpeedCount += 1;
-          }else{
+          } else {
             clearInterval(self.moreSpeedIntervalId);
             self.moreSpeedIntervalId = undefined;
           }
-        },1000)
+        }, 1000)
       }
     },
     add: function(event) {
@@ -171,11 +161,11 @@ export default {
       self.newName = '';
       return index;
     },
-    enqueue:function(guy){
+    enqueue: function(guy) {
       let self = this;
       let squeueLen = self.squeue.length;
-      let pos = Math.floor(Math.random()*(squeueLen-1))
-      self.squeue.splice(pos,0,guy)
+      let pos = Math.floor(Math.random() * (squeueLen - 1))
+      self.squeue.splice(pos, 0, guy)
       return pos
     }
   }
@@ -184,35 +174,70 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-.slot-machine{
+.slot-machine {
   position: relative;
   width: 140px;
   margin: 15px;
   display: inline-block;
 }
+
 .avatar-cont {
   width: 130px;
   height: 130px;
   border-radius: 50%;
-  border:5px solid #fee117;
+  border: 5px solid #fee117;
   box-shadow: 0px 0px 20px #e9e8fd;
   background-color: #fff;
   overflow: hidden;
   position: relative;
 }
 
-img.avatar{
-  width: 130px;
-  height: 130px;
+img.avatar {
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
 }
-.user-name{
+
+.user-name {
   font-size: 28px;
   font-weight: 500;
-  color:#fee117;
+  color: #fee117;
   text-align: center;
-  margin:20px;
+  margin: 20px;
   text-shadow: 0px 0px 20px #e9e8fd;
 }
+
+.slot-machine.big {
+  position: relative;
+  width: 200px;
+  margin: 15px;
+  display: inline-block;
+}
+
+.slot-machine.big .avatar-cont {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 5px solid #fee117;
+  box-shadow: 0px 0px 20px #e9e8fd;
+  background-color: #fff;
+  overflow: hidden;
+  position: relative;
+}
+
+.slot-machine.big img.avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+
+.slot-machine.big .user-name {
+  font-size: 28px;
+  font-weight: 500;
+  color: #fee117;
+  text-align: center;
+  margin: 20px;
+  text-shadow: 0px 0px 20px #e9e8fd;
+}
+
 </style>
